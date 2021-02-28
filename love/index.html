@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Shippr | XG1lab</title>
+    <style>
+      * {
+        box-sizing: border-box;
+        outline: none;
+        transition: all 1s ease 1ms;
+      }
+      html,
+      body {
+        height: 100%;
+        margin: 0;
+        font-size: 1rem;
+      }
+      .app {
+        background-color: lightsalmon;
+        min-height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      form {
+        padding: 10px;
+        margin: 20px;
+        background-color: darksalmon;
+        color: darkred;
+        border-radius: 20px;
+        box-shadow: 0 0 20px darksalmon;
+      }
+      form .input {
+        padding: 5px 10px;
+      }
+      form .input label {
+        font-weight: 700;
+        padding: 10px;
+      }
+      form .input input {
+        width: 100%;
+        padding: 10px;
+        border: 0;
+        border-radius: 20px;
+        font-size: 24px;
+        font-weight: 700;
+        color: darkred;
+        box-shadow: inset 0 0 20px #ccc;
+      }
+      form .buttons {
+        padding: 10px;
+        display: flex;
+        justify-content: space-around;
+      }
+      form .buttons button:first-child {
+        border-radius: 20px 0 0 20px;
+      }
+      form .buttons button:last-child {
+        border-radius: 0 20px 20px 0;
+      }
+      form .buttons button {
+        border: 0;
+        color: darksalmon;
+        font-size: 1rem;
+        font-weight: 700;
+        background-color: darkred;
+        padding: 10px 20px;
+        width: 100%;
+      }
+      form .buttons button:hover {
+        color: salmon;
+        background-color: brown;
+        cursor: pointer;
+      }
+      .result {
+        background-color: rgb(255 0 0 / 50%);
+        padding: 20px;
+        margin: 20px;
+        border-radius: 20px;
+        color: darkred;
+        font-size: 3rem;
+        opacity: 0;
+        text-align: center;
+      }
+      .result span {
+        display: block;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app">
+      <div class="container">
+        <form class="shippr">
+          <div class="input">
+            <label>Seu nome:</label>
+            <input type="text" name="yourname" id="yourname" placeholder="Você" />
+          </div>
+          <div class="input">
+            <label>Nome do crush:</label>
+            <input type="text" name="chushname" id="crushname" placeholder="Crush" />
+          </div>
+          <div class="buttons">
+            <button type="submit">Ship</button>
+            <button type="reset">Limpar</button>
+          </div>
+        </form>
+        <div class="result"></div>
+      </div>
+    </div>
+    <script>
+      const form = document.querySelector("form.shippr");
+      const inputs = document.querySelectorAll("input");
+      const uname = form.querySelector("#yourname");
+      const cname = form.querySelector("#crushname");
+      const submit = form.querySelector("button[type=submit]");
+      const result = document.querySelector(".result");
+      const half = function (string, pos = "start") {
+        const sanitize = string
+          .split("")
+          .filter((str) => /[ÃãÁáÀàÉéÈèÍíÌìÓóÒòÚúÙùÇça-zA-Z]/.test(str));
+        let response = [];
+        if (pos === "start") {
+          response = sanitize.splice(0, sanitize.length / 2);
+        } else if (pos === "end") {
+          response = sanitize.splice(sanitize.length / 2, sanitize.length);
+        }
+        return response.join("");
+      };
+      inputs.forEach(function (input) {
+        input.addEventListener("keyup", function () {
+          if (typeof input.value !== "string") return;
+          input.value =
+            input.value.charAt(0).toUpperCase() + input.value.slice(1);
+        });
+      });
+      submit.addEventListener("click", function (event) {
+        event.preventDefault();
+        result.style.opacity = 0;
+        if (uname.value.length && cname.value.length) {
+          result.innerHTML = `
+          <span>${half(uname.value)}${half(cname.value, "end")}</span>
+          <span>${half(cname.value)}${half(uname.value, "end")}</span>
+          `;
+          result.style.opacity = 1;
+        }
+      });
+    </script>
+  </body>
+</html>
